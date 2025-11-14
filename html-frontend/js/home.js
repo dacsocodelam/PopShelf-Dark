@@ -1,5 +1,5 @@
 // API Base URL
-const API_URL = 'http://localhost:3000/api/v1/products';
+const API_URL = 'http://127.0.0.1:3000/api/v1/products';
 
 // Load products when page loads
 document.addEventListener('DOMContentLoaded', () => {

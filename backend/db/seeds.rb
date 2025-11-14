@@ -5,6 +5,15 @@ Product.destroy_all
 
 Product.create!([
   {
+    name: "未来ノート (Mirai Note)",
+    description: "A smart notebook for planning and tracking goals.",
+    author: "田中 太郎 (Tanaka Tarou)",
+    release_year: 2025,
+    price: 19.80,
+    genre: "Stationery",
+    rating: 4.5
+  },
+  {
     name: "The Great Gatsby",
     description: "A novel by F. Scott Fitzgerald.",
     author: "F. Scott Fitzgerald",
@@ -30,6 +39,24 @@ Product.create!([
     price: 59.99,
     genre: "Game",
     rating: 5
+  },
+  {
+    name: "Atomic Habits",
+    description: "A book for building good habits and changing your life.",
+    author: "James Clear",
+    release_year: 2018,
+    price: 12.50,
+    genre: "Self-help",
+    rating: 4.6
+  },
+  {
+    name: "Interstellar",
+    description: "A sci-fi movie about space and time travel.",
+    author: "Christopher Nolan",
+    release_year: 2014,
+    price: 21.00,
+    genre: "Movie",
+    rating: 4.8
   }
 ])
 

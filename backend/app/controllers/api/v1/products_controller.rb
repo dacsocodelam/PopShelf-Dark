@@ -3,7 +3,16 @@ class Api::V1::ProductsController < ApplicationController
   before_action :set_product, only: [:show, :update, :destroy]
 
   def index
-    @products = ::Product.all
+    if params[:keyword].present?
+      # Search by name, description, author, or genre  trỏ 35-60
+      keyword = "%#{params[:keyword]}%"
+      @products = ::Product.where(
+        "name LIKE ? OR description LIKE ? OR author LIKE ? OR genre LIKE ?",
+        keyword, keyword, keyword, keyword
+      )
+    else
+      @products = ::Product.all
+    end
     render json: @products.as_json(methods: :cover_photo_url)
   end
 

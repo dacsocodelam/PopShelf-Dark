@@ -1,64 +1,77 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./login.css"; // Thêm dòng này để import CSS
+import { useAuth } from "../../context/AuthContext";
+import "./login.css";
 
-function Login({ onLogin }) {
+function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  
+  const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
+    setLoading(true);
 
-    fetch("http://localhost:3000/api/v1/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email: email, password: password }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.token) {
-          localStorage.setItem("token", data.token);
-          onLogin();
-          navigate("/admin");
-        } else {
-          setError(data.error || "パスワードが違います。");
-        }
-      })
-      .catch(() => {
-        setError("An error occurred. Please try again.");
-      });
+    const result = await login(email, password);
+
+    if (result.success) {
+      navigate("/admin");
+    } else {
+      setError(result.error || "ログインに失敗しました");
+    }
+    
+    setLoading(false);
   };
 
   return (
     <div className="login-container">
-      <form className="login-form" onSubmit={handleSubmit}>
-        <h2>管理者としてログイン</h2>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+      <div className="login-box">
+        <h1 className="login-title">ログイン</h1>
+        <p className="login-subtitle">PopShelf管理画面へのアクセス</p>
+
+        {error && <div className="login-error">{error}</div>}
+
+        <form onSubmit={handleSubmit} className="login-form">
+          <div className="form-group">
+            <label htmlFor="email">メールアドレス</label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="例: user@popshelf.com"
+              required
+              disabled={loading}
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="password">パスワード</label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="パスワードを入力"
+              required
+              disabled={loading}
+            />
+          </div>
+
+          <button type="submit" className="login-btn" disabled={loading}>
+            {loading ? 'ログイン中...' : 'ログイン'}
+          </button>
+        </form>
+
+        <div className="login-footer">
+          <a href="/">ホームに戻る</a>
         </div>
-        <div>
-          <label>パスワード:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        {error && <p>{error}</p>}
-        <button type="submit">ログイン</button>
-      </form>
+      </div>
     </div>
   );
 }

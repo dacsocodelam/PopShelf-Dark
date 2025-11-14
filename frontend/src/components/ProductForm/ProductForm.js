@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from "../../context/AuthContext";
 import "./ProductForm.css";
 
 function ProductForm({ onProductCreated, productToEdit, onProductUpdated }) {
+  const { getAuthHeader } = useAuth();
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -57,18 +59,18 @@ function ProductForm({ onProductCreated, productToEdit, onProductUpdated }) {
       onProductUpdated(submissionData, productToEdit.id);
     } else {
       // Create mode
-      const token = localStorage.getItem("token");
+      const authHeaders = getAuthHeader();
       fetch("http://localhost:3000/api/v1/products", {
         method: "POST",
         headers: {
           // Do NOT set Content-Type, the browser will set it for FormData
-          Authorization: `Bearer ${token}`,
+          ...authHeaders,
         },
         body: submissionData, // Send FormData directly
       })
         .then((response) => {
           if (!response.ok) {
-            throw new Error("Failed to create product");
+            throw new Error("商品の作成に失敗しました");
           }
           return response.json();
         })
@@ -84,6 +86,7 @@ function ProductForm({ onProductCreated, productToEdit, onProductUpdated }) {
             rating: "",
           });
           setCoverPhoto(null);
+          alert("商品が正常に作成されました！");
         })
         .catch((err) => alert(err.message));
     }

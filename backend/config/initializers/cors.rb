@@ -16,7 +16,7 @@
 # end
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins 'localhost:3001', '127.0.0.1:3001' # Thay 3001 bằng cổng của frontend nếu khác
+    origins '*' # Cho phép mọi nguồn, hoặc thêm '127.0.0.1:5500' nếu muốn giới hạn
 
     resource '*',
       headers: :any,

@@ -68,7 +68,7 @@ const demoProducts = [
   }
 ];
 
-// Lấy id sản phẩm từ URL (?id=...)
+
 function getProductIdFromUrl() {
   const params = new URLSearchParams(window.location.search);
   return parseInt(params.get('id'), 10);

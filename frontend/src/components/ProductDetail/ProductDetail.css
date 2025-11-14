@@ -79,3 +79,20 @@
   border: 1.5px solid #3f2b96;
   outline: none;
 }
+
+.error-message {
+  background: #ffe0e0;
+  color: #d8000c;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  border: 1px solid #d8000c;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+.product-detail-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}

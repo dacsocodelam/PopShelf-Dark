@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import ProductList from "../../components/ProductList/ProductList";
 import ProductForm from "../../components/ProductForm/ProductForm";
 import "./admin.css";
@@ -7,6 +8,8 @@ import "./admin.css";
 function Admin() {
   const [products, setProducts] = useState([]);
   const [productToEdit, setProductToEdit] = useState(null);
+  const { logout, getAuthHeader, user } = useAuth();
+  const navigate = useNavigate();
 
   const fetchProducts = () => {
     fetch("http://localhost:3000/api/v1/products")
@@ -20,17 +23,20 @@ function Admin() {
   }, []);
 
   const handleDelete = (productId) => {
-    const token = localStorage.getItem("token");
+    if (!window.confirm('本当にこの商品を削除しますか？')) {
+      return;
+    }
+
     fetch(`http://localhost:3000/api/v1/products/${productId}`, {
       method: "DELETE",
       headers: {
-        Authorization: `Bearer ${token}`,
+        ...getAuthHeader(),
       },
     }).then((response) => {
       if (response.ok) {
         fetchProducts();
       } else {
-        alert("Failed to delete product. Are you logged in?");
+        alert("商品の削除に失敗しました。");
       }
     });
   };
@@ -40,11 +46,10 @@ function Admin() {
   };
 
   const handleUpdate = (submissionData, productId) => {
-    const token = localStorage.getItem("token");
     fetch(`http://localhost:3000/api/v1/products/${productId}`, {
       method: "PATCH",
       headers: {
-        Authorization: `Bearer ${token}`,
+        ...getAuthHeader(),
       },
       body: submissionData,
     }).then(() => {
@@ -53,9 +58,22 @@ function Admin() {
     });
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
   return (
     <div className="admin-container">
-      <h1 className="admin-title">管理者用ページ (Admin)</h1>
+      <div className="admin-header">
+        <h1 className="admin-title">管理者用ページ (Admin)</h1>
+        <div className="admin-user-info">
+          {user && <span>ようこそ、{user.email}</span>}
+          <button onClick={handleLogout} className="logout-btn">
+            ログアウト
+          </button>
+        </div>
+      </div>
       <div className="admin-card">
         <ProductForm
           onProductCreated={fetchProducts}

@@ -1,5 +1,5 @@
 // API Base URL
-const API_URL = 'http://localhost:3000/api/v1/products';
+const API_URL = 'http://127.0.0.1:3000/api/v1/products';
 
 let editingProductId = null;
 
@@ -161,6 +161,10 @@ function editProduct(productId) {
             document.getElementById('submitButtonText').textContent = '更新';
             document.getElementById('cancelEditBtn').style.display = 'block';
 
+            // Hiển thị thông báo edit và hiệu ứng
+            document.getElementById('editNotice').style.display = 'block';
+            document.getElementById('productForm').classList.add('edit-mode');
+
             editingProductId = productId;
 
             // Scroll to form
@@ -210,5 +214,7 @@ function resetForm() {
     document.getElementById('formTitle').textContent = '新規商品を追加';
     document.getElementById('submitButtonText').textContent = '追加';
     document.getElementById('cancelEditBtn').style.display = 'none';
+    document.getElementById('editNotice').style.display = 'none';
+    document.getElementById('productForm').classList.remove('edit-mode');
     editingProductId = null;
 }

@@ -1,3 +1,10 @@
+/* Edit mode highlight for product form */
+.product-form.edit-mode {
+  box-shadow: 0 0 0 4px #d66dd3, 0 8px 32px 0 #d66dd3;
+  border: 2px solid #d66dd3;
+  background: #fff7fa;
+  transition: box-shadow 0.2s, border 0.2s, background 0.2s;
+}
 * {
   margin: 0;
   padding: 0;

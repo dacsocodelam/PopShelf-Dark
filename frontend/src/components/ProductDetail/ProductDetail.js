@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import "./ProductDetail.css";
 
 function ProductDetail() {
@@ -7,7 +8,10 @@ function ProductDetail() {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({});
   const [coverPhoto, setCoverPhoto] = useState(null); // State cho file ảnh mới
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
+  const { getAuthHeader } = useAuth();
 
   const fetchProduct = () => {
     fetch(`http://localhost:3000/api/v1/products/${id}`)
@@ -21,6 +25,7 @@ function ProductDetail() {
 
   useEffect(() => {
     fetchProduct();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const handleInputChange = (event) => {
@@ -33,29 +38,47 @@ function ProductDetail() {
   };
 
   const handleSave = () => {
+    setError("");
+    setIsLoading(true);
+    
     const submissionData = new FormData();
     // Thêm các trường dữ liệu text vào FormData
     Object.keys(formData).forEach((key) => {
-      submissionData.append(`product[${key}]`, formData[key]);
+      if (key !== 'id' && key !== 'created_at' && key !== 'updated_at' && key !== 'cover_photo_url') {
+        submissionData.append(`product[${key}]`, formData[key]);
+      }
     });
     // Nếu có file ảnh mới, thêm vào FormData
     if (coverPhoto) {
       submissionData.append("product[cover_photo]", coverPhoto);
     }
 
-    const token = localStorage.getItem("token");
     fetch(`http://localhost:3000/api/v1/products/${id}`, {
       method: "PATCH",
       headers: {
-        Authorization: `Bearer ${token}`,
+        ...getAuthHeader(),
         // Không cần Content-Type, trình duyệt tự xử lý cho FormData
       },
       body: submissionData,
-    }).then(() => {
-      setIsEditing(false);
-      setCoverPhoto(null); // Reset file input
-      fetchProduct();
-    });
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("更新に失敗しました");
+        }
+        return response.json();
+      })
+      .then(() => {
+        setIsEditing(false);
+        setCoverPhoto(null); // Reset file input
+        setIsLoading(false);
+        fetchProduct();
+        alert("更新しました！");
+      })
+      .catch((error) => {
+        console.error("Error updating product:", error);
+        setError("更新に失敗しました。もう一度お試しください。");
+        setIsLoading(false);
+      });
   };
 
   if (!product) {
@@ -64,6 +87,7 @@ function ProductDetail() {
 
   return (
     <div className="product-detail-container">
+      {error && <div className="error-message">{error}</div>}
       {isEditing ? (
         <div>
           <input
@@ -134,10 +158,20 @@ function ProductDetail() {
             <input type="file" onChange={handleFileChange} />
           </p>
           <div className="product-detail-actions">
-            <button className="product-detail-btn" onClick={handleSave}>保存</button>
+            <button 
+              className="product-detail-btn" 
+              onClick={handleSave}
+              disabled={isLoading}
+            >
+              {isLoading ? "保存中..." : "保存"}
+            </button>
             <button
               className="product-detail-btn"
-              onClick={() => setIsEditing(false)}
+              onClick={() => {
+                setIsEditing(false);
+                setError("");
+              }}
+              disabled={isLoading}
             >
               キャンセル
             </button>

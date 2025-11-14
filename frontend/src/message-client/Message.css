@@ -1,0 +1,15 @@
+.mc-container{max-width:780px;margin:24px auto;padding:18px;background:#fff;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.06)}
+.mc-actions{margin-bottom:12px}
+.mc-btn{display:inline-block;padding:8px 14px;background:#3f2b96;color:#fff;border-radius:6px;text-decoration:none;border:none;cursor:pointer}
+.mc-list{list-style:none;padding:0;margin:0}
+.mc-item{padding:12px;border-bottom:1px solid #eee}
+.mc-item-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.mc-username{color:#3f2b96}
+.mc-content{margin:8px 0}
+.mc-item-actions{display:flex;gap:8px}
+.mc-link{background:none;border:none;color:#3f2b96;cursor:pointer;text-decoration:underline;padding:0}
+.mc-delete{color:#c23}
+.mc-form-row{margin-bottom:12px;display:flex;flex-direction:column}
+.mc-form-row input,.mc-form-row textarea{padding:8px;border:1px solid #ddd;border-radius:6px}
+.mc-errors{background:#ffecec;border:1px solid #f5c6cb;padding:10px;border-radius:6px;margin-bottom:12px;color:#a00}
+.mc-loading{padding:12px;text-align:center}
