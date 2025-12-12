@@ -10,6 +10,59 @@
   display: flex;
   flex-direction: column;
   gap: 18px;
+  position: relative;
+}
+
+/* LED border animation for edit mode */
+.product-form.editing {
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: visible;
+}
+
+/* Snake LED effect - chạy như con rắn */
+.product-form.editing::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 18px;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 270deg,
+    #ff00ff 270deg,
+    #00ffff 280deg,
+    #ff00ff 290deg,
+    transparent 300deg,
+    transparent 360deg
+  );
+  animation: snakeBorder 2s linear infinite;
+  z-index: -1;
+}
+
+.product-form.editing::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  background: rgba(45, 27, 59, 0.95);
+  z-index: -1;
+}
+
+@keyframes snakeBorder {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* LED particles chasing effect */
+.product-form.editing {
+  box-shadow: 
+    0 0 5px rgba(255, 0, 255, 0.3),
+    0 0 10px rgba(0, 255, 255, 0.2);
 }
 
 .product-form label {
@@ -30,16 +83,26 @@
   margin-bottom: 10px;
   background: #fff;
   color: #2d1b3b;
-  transition: border 0.2s, box-shadow 0.2s;
+  transition: all 0.3s ease;
   box-shadow: 0 1px 8px #e0b3f7;
   resize: vertical;
 }
 
 .product-form input:focus,
 .product-form textarea:focus {
-  border: 1.5px solid #3f2b96;
-  box-shadow: 0 0 0 3px #d66dd3;
+  border: 2px solid #ff00ff;
+  box-shadow: 0 0 20px rgba(255, 0, 255, 0.5), 0 0 40px rgba(0, 255, 255, 0.3);
   outline: none;
+  animation: inputGlow 1.5s ease-in-out infinite;
+}
+
+@keyframes inputGlow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(255, 0, 255, 0.5), 0 0 20px rgba(255, 0, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5), 0 0 40px rgba(0, 255, 255, 0.3);
+  }
 }
 
 .product-form input[type="file"] {

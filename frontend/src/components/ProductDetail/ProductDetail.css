@@ -7,6 +7,58 @@
   padding: 36px 32px 28px 32px;
   color: #2d1b3b;
   font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+/* LED effect when editing - Snake running around border */
+.product-detail-container.editing {
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: visible;
+}
+
+.product-detail-container.editing::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 18px;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 270deg,
+    #ff00ff 270deg,
+    #00ffff 280deg,
+    #ff00ff 290deg,
+    transparent 300deg,
+    transparent 360deg
+  );
+  animation: snakeDetailBorder 2s linear infinite;
+  z-index: -1;
+}
+
+.product-detail-container.editing::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  background: #fff;
+  z-index: -1;
+}
+
+@keyframes snakeDetailBorder {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.product-detail-container.editing {
+  box-shadow: 
+    0 0 10px rgba(255, 0, 255, 0.4),
+    0 0 20px rgba(0, 255, 255, 0.3);
 }
 
 .product-detail-container h1 {
@@ -71,13 +123,25 @@
   width: 80%;
   background: #f7f0fa;
   color: #2d1b3b;
-  transition: border 0.2s;
+  transition: all 0.3s ease;
 }
 
 .product-detail-container input[type="text"]:focus,
 .product-detail-container input[type="number"]:focus {
-  border: 1.5px solid #3f2b96;
+  border: 2px solid #ff00ff;
   outline: none;
+  box-shadow: 0 0 15px rgba(255, 0, 255, 0.5), 0 0 30px rgba(0, 255, 255, 0.3);
+  animation: inputDetailGlow 1.5s ease-in-out infinite;
+  background: #fff;
+}
+
+@keyframes inputDetailGlow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(255, 0, 255, 0.5), 0 0 20px rgba(255, 0, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5), 0 0 40px rgba(0, 255, 255, 0.3);
+  }
 }
 
 .error-message {

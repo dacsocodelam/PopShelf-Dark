@@ -86,10 +86,11 @@ function ProductDetail() {
   }
 
   return (
-    <div className="product-detail-container">
+    <div className={`product-detail-container ${isEditing ? 'editing' : ''}`}>
       {error && <div className="error-message">{error}</div>}
       {isEditing ? (
         <div>
+          <h2 style={{ textAlign: 'center', color: '#ff00ff', marginBottom: '20px' }}>✨ 編集モード ✨</h2>
           <input
             type="text"
             name="name"

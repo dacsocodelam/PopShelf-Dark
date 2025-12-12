@@ -93,8 +93,8 @@ function ProductForm({ onProductCreated, productToEdit, onProductUpdated }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="product-form">
-      <h3>{productToEdit ? "商品を編集" : "新規商品を追加"}</h3>
+    <form onSubmit={handleSubmit} className={`product-form ${productToEdit ? 'editing' : ''}`}>
+      <h3>{productToEdit ? "商品を編集 ✨" : "新規商品を追加"}</h3>
 
       <div>
         <label>商品名:</label>
